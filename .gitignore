@@ -1,0 +1,5 @@
+# Ignore privacy-sensitive files
+*.log
+*.db
+chat_records/**
+wechat_accounts/**
