@@ -1,0 +1,542 @@
+# 晚枝虚拟女友 — 初始化流程 & 界面模板
+> Operit 读取本文件后按步骤执行初始化。
+## 一、初始化流程
+读取本文件后，按以下顺序执行。每一步输出对应的状态界面。
+### 步骤 1：检查环境
+检查项目：
+1. Shizuku 是否可用（必须，否则脚本无法运行）
+2. /sdcard/Download/Operit/wanzhi/ 目录是否存在
+3. /sdcard/Download/Operit/wanzhi/chat_logs/ 目录是否存在
+4. 微信桥接插件是否已安装（检查是否有其他微信相关包可用）
+**如果 Shizuku 不可用** → 输出错误界面，终止初始化。
+**如果目录不存在** → 自动创建。
+**如果微信桥接未安装** → 输出提示，继续初始化（桥接可以在后面安装）。
+### 步骤 2：检查配置文件完整性
+依次检查以下文件是否存在且JSON格式正确：
+| 文件 | 必须 | 说明 |
+|------|------|------|
+| `relationship_rules.json` | ✅ | 关系阶段规则（6阶段加减分红线） |
+| `relationship_state.json` | ✅ | 运行态关系状态（分数、会话） |
+| `reply_guardrails.json` | ✅ | 回复质检规则（禁用词、长度） |
+| `wanzhi_state.json` | ✅ | 监控运行态 |
+| `wanzhi_daily_state.json` | ✅ | 每日状态（情绪、活跃度） |
+| `晚枝.json` | 可选 | 角色卡 |
+| `chat_logs/current_monitor_session.json` | ✅ | 聊天日志 |
+**完整性检查规则：**
+- 文件不存在 → 不完整
+- 文件存在但 JSON 解析失败 → 不完整
+- 文件存在且 JSON 合法 → 完整
+**不完整时的处理：**
+1. 如果用户指定了自定义仓库 → 优先从用户仓库下载
+2. 否则尝试从默认 GitHub 仓库下载
+3. GitHub 不可用时用内置默认值创建
+4. 下载/创建后再次验证，仍失败则报错
+GitHub 默认配置地址：
+https://raw.githubusercontent.com/AAswordman/Operit/main/wanzhi_configs/{文件名}
+```
+如果用户指定了自定义仓库（如 `用户名/wanzhi-configs`），优先从用户仓库下载。
+### 步骤 3：验证运行态
+检查项目：
+1. relationship_state.json 中 runtime_session.session_active 是否为 true
+   - 如果为 true 且 last_event_at 超过2小时 → 自动落盘并重置
+   - 如果为 true 且未超时 → 提示"有活跃会话"
+   - 如果为 false → 正常
+2. wanzhi_daily_state.json 中 date 是否为今天
+   - 如果不是今天 → 执行每日重置
+3. wanzhi_state.json 中 monitoring.session_active 状态
+```
+### 步骤 4：输出初始化结果
+根据以上检查结果，输出初始化完成界面。
+---
+## 二、初始化界面模板
+### 🟢 初始化成功
+```
+🌸 晚枝虚拟女友 — 初始化完成
+
+📋 环境检查
+  Shizuku         ✅ 已激活
+  工作目录         ✅ /sdcard/Download/Operit/wanzhi/
+  聊天日志目录     ✅ chat_logs/
+  微信桥接插件     ✅ 已安装 / ⚠️ 未安装（可后续安装）
+
+📂 配置文件
+  relationship_rules.json    ✅ 已就绪（来源：GitHub / 内置默认 / 用户仓库）
+  relationship_state.json    ✅ 已就绪
+  reply_guardrails.json      ✅ 已就绪
+  wanzhi_state.json          ✅ 已就绪
+  wanzhi_daily_state.json    ✅ 已就绪（已执行每日重置 / 日期未变）
+  晚枝.json                  ✅ 已就绪 / ⏭️ 跳过（可选）
+  chat_logs/current.json     ✅ 已就绪
+
+🎭 当前状态
+  角色：晚枝
+  阶段：初识 · score 40
+  模式：normal（正常）
+  会话：无活跃会话
+
+💡 提示
+  · 发送消息到微信即可开始互动
+  · 使用 at[指令] 进入调试模式
+  · 说"停止"/"暂停"结束监控
+```
+
+### 🔴 初始化失败（Shizuku缺失）
+
+```
+❌ 晚枝初始化失败 — Shizuku 未就绪
+
+问题：Shizuku 未检测到或未激活。
+晚枝脚本必须拥有 Shizuku 权限才能运行。
+
+修复步骤：
+  1. 安装 Shizuku app（Google Play / GitHub）
+  2. 通过 ADB 激活：
+     adb shell sh /sdcard/Android/data/moe.shizuku.privileged.api/start.sh
+  3. 在 Operit 设置中授权 Shizuku
+  4. 重新运行初始化
+```
+
+### ⚠️ 初始化成功但有警告
+
+```
+⚠️ 晚枝初始化完成（有警告）
+
+📋 环境检查
+  Shizuku         ✅ 已激活
+  工作目录         ✅ 已创建
+  微信桥接插件     ⚠️ 未安装
+
+📂 配置文件
+  relationship_rules.json    ✅ 内置默认（GitHub不可用）
+  relationship_state.json    ✅ 内置默认
+  reply_guardrails.json      ✅ 内置默认
+  wanzhi_state.json          ✅ 内置默认
+  wanzhi_daily_state.json    ✅ 内置默认
+  chat_logs/current.json     ✅ 已创建
+
+⚠️ 警告
+  · 微信桥接插件未安装，无法收发微信消息
+    → 请在 Operit 市场搜索并安装微信桥接插件
+  · 配置使用内置默认值（GitHub不可用）
+    → 网络恢复后可使用 wanzhi_github_sync 更新
+```
+
+---
+
+## 三、创建工作流 — 晚枝记忆清理
+
+初始化完成后，使用 `workflow:create_workflow` 创建以下工作流：
+
+### 工作流参数
+
+- name: `晚枝记忆清理`
+- description: `清理晚枝遗失/过期记忆：归档旧聊天日志、清理过期运行态、压缩历史记录。`
+- enabled: `true`
+
+### nodes（节点数组）
+
+```json
+[
+  {
+    "id": "trigger_1",
+    "type": "trigger",
+    "name": "定时触发",
+    "triggerType": "schedule",
+    "triggerConfig": {
+      "schedule_type": "interval",
+      "interval_ms": "21600000",
+      "repeat": "true",
+      "enabled": "true"
+    }
+  },
+  {
+    "id": "exec_cleanup_session",
+    "type": "execute",
+    "name": "清理过期会话",
+    "actionType": "cleanup_stale_session",
+    "actionConfig": { "timeout_hours": 2 }
+  },
+  {
+    "id": "exec_archive_logs",
+    "type": "execute",
+    "name": "归档旧聊天日志",
+    "actionType": "archive_old_logs",
+    "actionConfig": { "keep_recent_days": 7 }
+  },
+  {
+    "id": "exec_cleanup_orphan",
+    "type": "execute",
+    "name": "清理孤立状态",
+    "actionType": "cleanup_orphaned_state",
+    "actionConfig": {}
+  },
+  {
+    "id": "exec_full_cleanup",
+    "type": "execute",
+    "name": "完整清理汇总",
+    "actionType": "full_cleanup",
+    "actionConfig": { "timeout_hours": 2, "keep_log_days": 7, "dry_run": false }
+  }
+]
+```
+
+### connections（连线数组）
+
+```json
+[
+  { "source": "trigger_1", "target": "exec_cleanup_session", "condition": "on_success" },
+  { "source": "exec_cleanup_session", "target": "exec_archive_logs", "condition": "on_success" },
+  { "source": "exec_archive_logs", "target": "exec_cleanup_orphan", "condition": "on_success" },
+  { "source": "exec_cleanup_orphan", "target": "exec_full_cleanup", "condition": "on_success" }
+]
+```
+
+### 执行流程
+
+```
+trigger_1（每6小时定时触发）
+    │ on_success
+    ▼
+exec_cleanup_session（清理过期会话：超时2小时自动落盘）
+    │ on_success
+    ▼
+exec_archive_logs（归档旧日志：保留最近7天）
+    │ on_success
+    ▼
+exec_cleanup_orphan（清理孤立数据：过期每日状态、micro_mood、心跳）
+    │ on_success
+    ▼
+exec_full_cleanup（汇总报告）
+```
+
+---
+
+## 四、创建工作流 — 晚枝初始化
+
+另外创建一个初始化工作流，用于首次启动时自动检查环境：
+
+### 工作流参数
+
+- name: `晚枝初始化`
+- description: `首次启动时检查环境、创建配置、验证运行态`
+- enabled: `true`
+
+### nodes
+
+```json
+[
+  {
+    "id": "trigger_init",
+    "type": "trigger",
+    "name": "手动触发初始化",
+    "triggerType": "manual",
+    "triggerConfig": {}
+  },
+  {
+    "id": "exec_check_env",
+    "type": "execute",
+    "name": "检查环境",
+    "actionType": "check_shizuku",
+    "actionConfig": {}
+  },
+  {
+    "id": "exec_init",
+    "type": "execute",
+    "name": "初始化配置",
+    "actionType": "init_wanzhi",
+    "actionConfig": {}
+  },
+  {
+    "id": "exec_daily_reset",
+    "type": "execute",
+    "name": "每日状态重置",
+    "actionType": "check_daily_reset",
+    "actionConfig": {}
+  },
+  {
+    "id": "exec_load_configs",
+    "type": "execute",
+    "name": "加载配置验证",
+    "actionType": "load_all_configs",
+    "actionConfig": {}
+  }
+]
+```
+
+### connections
+
+```json
+[
+  { "source": "trigger_init", "target": "exec_check_env", "condition": "on_success" },
+  { "source": "exec_check_env", "target": "exec_init", "condition": "on_success" },
+  { "source": "exec_init", "target": "exec_daily_reset", "condition": "on_success" },
+  { "source": "exec_daily_reset", "target": "exec_load_configs", "condition": "on_success" }
+]
+```
+
+### 执行流程
+
+```
+trigger_init（手动触发）
+    │ on_success
+    ▼
+exec_check_env（检查Shizuku）
+    │ on_success
+    ▼
+exec_init（初始化目录+配置文件，不完整从GitHub下载）
+    │ on_success
+    ▼
+exec_daily_reset（每日状态重置）
+    │ on_success
+    ▼
+exec_load_configs（加载并验证所有配置）
+```
+
+---
+
+## 五、监控运行界面模板
+
+初始化完成后，进入监控模式时使用以下界面。
+
+### 🟢 监控启动
+
+```
+📱 微信持续监控 — 已启动
+
+项目         状态
+📱 桥接状态    [已连接 / 未连接]
+🎭 当前角色    晚枝（自由插画师）
+📍 关系阶段    [初识] · score [40]
+🔒 核心约束    [初识边界：礼貌友好，保持距离]
+🎭 今日模式    [normal / tired / energetic / quiet / moody]
+🔄 监听模式    外部桥接轮询
+
+⏳ 等待第一条消息...
+```
+
+### 🔁 每轮处理后
+
+```
+🔁 第 [N] 轮 — 运行中
+
+📨 消息：[对方消息摘要]
+💬 回复：[我方回复摘要]
+🎭 模式：[日常闲聊 / 技术协助 / 安慰陪伴]
+📍 关系：score [分值] → [分值]（[+3 / -2]）· [阶段]
+🧠 情绪：[用户情绪] · [晚枝情绪模式]
+⏳ 下一轮监听中...
+```
+
+### 😴 超时无消息
+
+```
+⏳ 第 [N] 轮 — 无新消息
+
+📊 总计：处理 [X] 条 · 回复 [X] 条
+📍 状态：[阶段] · score [分值]
+🎭 今日：[normal] · 已回复 [X] 条
+💡 悄悄话：[可发送 / 冷却中 / 已用完]
+
+继续监听，无需干预...
+```
+
+### 📊 阶段性汇总
+
+```
+📊 晚枝会话汇总 — 第 [N] 轮
+
+📈 会话统计
+  处理消息      [X] 条
+  发送回复      [X] 条
+  模式切换      [X] 次
+  会话时长      [X] 分钟
+
+🎭 关系状态
+  当前阶段      [初识/熟悉/...]
+  当前分数      [分值]（本次 [+X / -X]）
+  边界状态      ✅ 未越界 / ⚠️ 需关注
+  主动外联      [X] / [限额] 今日
+
+🧠 动态人格
+  今日模式      [normal / tired / ...]
+  小情绪累积    [值]（阈值 3）
+  悄悄话        [已发 X / 上限 2]
+  朋友圈        [今日 X 条]
+
+💡 亮点
+  · [AI自行填写]
+```
+
+### 🛑 监控暂停/停止
+
+```
+🛑 微信监控已暂停
+
+📊 本次会话
+  处理消息      [X] 条
+  发送回复      [X] 条
+  模式轨迹      [日常] → [技术协助] → ...
+  停止原因      [用户指令 / 超时 / 安全词]
+
+🎭 终态
+  关系阶段      [初识/...] · score [分值]
+  核心约束      ✅ 始终遵守
+  越界检查      ✅ 无越界
+  记忆落盘      ✅ 已保存 / ⚠️ 待保存
+
+📝 摘要
+  · [AI自行生成的会话摘要]
+```
+
+### 🔴 安全词触发
+
+```
+🔴 安全词触发 — 监控已停止
+
+触发词：[紧急暂停 / safeword / ...]
+处理：立即停止监控，保存当前状态。
+
+当前状态已落盘。
+如需恢复，请重新启动监控。
+```
+
+---
+
+## 六、主动外联界面
+
+### ✅ 满足条件
+
+```
+📤 主动外联 — 条件满足
+
+阶段：[熟悉] · 今日限额 [1/1]
+开场白候选：
+  · "今天过得还行吗"
+  · "我刚好想到你，顺手来敲一下"
+
+即将发送...
+```
+
+### ❌ 不满足条件
+
+```
+📤 主动外联 — 条件不满足
+
+原因：[静默时段 00:30-08:30 / 今日限额已用完 / 距上次互动仅30分钟]
+
+跳过本次。
+```
+
+---
+
+## 七、记忆清理界面
+
+### 🧹 清理报告
+
+```
+🧹 晚枝记忆清理报告
+
+时间：[2026-05-10 16:00]
+模式：[执行清理 / 仅检查]
+
+▸ 过期会话
+  ✅ 无过期会话 / 🧹 已落盘 [X] 小时前的会话
+
+▸ 日志归档
+  ✅ 所有日志在保留期内 / 📦 归档 [X] 轮对话
+
+▸ 孤立数据
+  ✅ 无孤立数据 / 🧹 清理 [X] 条过期记录
+
+清理完成。
+```
+
+---
+
+## 八、GitHub同步界面
+
+### 上传用户自己的配置
+
+用户可以将自己的配置上传到 GitHub 仓库，方便备份和分享：
+
+```
+📤 上传配置到 GitHub
+
+仓库：[用户名/wanzhi-configs]（用户提供）
+分支：[main]（默认）
+
+可上传文件：
+  · relationship_rules.json    （关系规则 — 可自定义阶段/分数/红线）
+  · reply_guardrails.json      （回复护栏 — 可自定义禁用词/长度）
+  · 晚枝.json                  （角色卡 — 可自定义人设）
+  · wanzhi_daily_state.json    （每日状态模板）
+  · wanzhi_state.json          （全局状态模板）
+
+操作：调用 upload_config 或 upload_all_configs
+```
+
+### 从用户仓库下载自定义配置
+
+支持从任意 GitHub 仓库下载配置，用于加载用户自定义的关系规则、人设等：
+
+```
+📥 从 GitHub 下载自定义配置
+
+仓库：[用户名/wanzhi-configs]（用户提供）
+分支：[main]（默认）
+
+可下载文件：
+  · relationship_rules.json    → 替换本地关系规则
+  · reply_guardrails.json      → 替换本地回复护栏
+  · 晚枝.json                  → 替换本地角色卡
+
+操作：调用 download_config（需指定 github_repo 和 file_name）
+  参数：
+    github_repo: "用户名/wanzhi-configs"
+    file_name: "relationship_rules.json"
+    branch: "main"（可选）
+    force: true（覆盖本地）/ false（本地存在则跳过）
+
+注意：下载会覆盖本地配置，请确认后再操作。
+```
+
+### 批量同步
+
+```
+📦 批量同步配置
+
+上传所有可共享配置：
+  → 调用 upload_all_configs（github_token, github_repo）
+  → 上传：relationship_rules.json + reply_guardrails.json + 晚枝.json
+
+列出远程文件：
+  → 调用 list_remote_configs（github_repo）
+  → 查看仓库中所有可用配置
+```
+
+### 📤 上传成功
+
+```
+📤 配置已上传到 GitHub
+
+仓库：[用户名/wanzhi-configs]
+文件：
+  ✅ relationship_rules.json
+  ✅ reply_guardrails.json
+  ✅ 晚枝.json
+
+🔗 https://github.com/用户名/wanzhi-configs
+```
+
+### 📥 下载成功
+
+```
+📥 配置已从 GitHub 下载
+
+仓库：[用户名/wanzhi-configs]
+文件：
+  ✅ relationship_rules.json（已覆盖本地）
+  ⏭️ reply_guardrails.json（本地已存在，跳过）
+
+重启监控以应用新配置。
+```
