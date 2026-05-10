@@ -28,33 +28,33 @@ METADATA
     ]},
     { name: 'cleanup_orphaned_state', description: { zh: '清理孤立状态数据。', en: 'Clean orphaned state.' }, parameters: [] },
     { name: 'full_cleanup', description: { zh: '一键执行完整清理流程。', en: 'Full cleanup.' }, parameters: [
-      { name: 'timeout_hours', description: { zh: '超时小时数（默认2）', en: 'Timeout hours' }, type: 'number', required: false },
-      { name: 'keep_log_days', description: { zh: '保留最近N天（默认7）', en: 'Keep log days' }, type: 'number', required: false },
+      { name: 'timeout_hours', description: { zh: '超时小时数', en: 'Timeout hours' }, type: 'number', required: false },
+      { name: 'keep_log_days', description: { zh: '保留天数', en: 'Keep days' }, type: 'number', required: false },
       { name: 'dry_run', description: { zh: '仅检查不执行', en: 'Dry run' }, type: 'boolean', required: false }
     ]},
 
     // ===== GitHub同步工具 =====
     { name: 'upload_config', description: { zh: '上传本地配置到GitHub。', en: 'Upload config.' }, parameters: [
       { name: 'github_token', description: { zh: 'GitHub Token', en: 'GitHub token' }, type: 'string', required: true },
-      { name: 'github_repo', description: { zh: 'GitHub仓库(owner/repo)', en: 'GitHub repo' }, type: 'string', required: true },
-      { name: 'file_name', description: { zh: '配置文件名', en: 'Config file name' }, type: 'string', required: true },
-      { name: 'branch', description: { zh: '分支名（默认main）', en: 'Branch name' }, type: 'string', required: false },
-      { name: 'commit_message', description: { zh: '提交信息', en: 'Commit message' }, type: 'string', required: false }
+      { name: 'github_repo', description: { zh: '仓库地址(owner/repo)', en: 'GitHub repo' }, type: 'string', required: true },
+      { name: 'file_name', description: { zh: '文件名', en: 'File name' }, type: 'string', required: true },
+      { name: 'branch', description: { zh: '分支名', en: 'Branch' }, type: 'string', required: false },
+      { name: 'commit_message', description: { zh: '提交信息', en: 'Commit msg' }, type: 'string', required: false }
     ]},
     { name: 'download_config', description: { zh: '从GitHub下载配置。', en: 'Download config.' }, parameters: [
-      { name: 'github_repo', description: { zh: 'GitHub仓库(owner/repo)', en: 'GitHub repo' }, type: 'string', required: true },
-      { name: 'file_name', description: { zh: '配置文件名', en: 'Config file name' }, type: 'string', required: true },
-      { name: 'branch', description: { zh: '分支名（默认main）', en: 'Branch name' }, type: 'string', required: false },
-      { name: 'force', description: { zh: '强制覆盖本地文件', en: 'Force overwrite' }, type: 'boolean', required: false }
+      { name: 'github_repo', description: { zh: '仓库地址(owner/repo)', en: 'GitHub repo' }, type: 'string', required: true },
+      { name: 'file_name', description: { zh: '文件名', en: 'File name' }, type: 'string', required: true },
+      { name: 'branch', description: { zh: '分支名', en: 'Branch' }, type: 'string', required: false },
+      { name: 'force', description: { zh: '强制覆盖', en: 'Force overwrite' }, type: 'boolean', required: false }
     ]},
     { name: 'list_remote_configs', description: { zh: '列出GitHub配置文件。', en: 'List remote.' }, parameters: [
-      { name: 'github_repo', description: { zh: 'GitHub仓库(owner/repo)', en: 'GitHub repo' }, type: 'string', required: true },
-      { name: 'branch', description: { zh: '分支名（默认main）', en: 'Branch name' }, type: 'string', required: false }
+      { name: 'github_repo', description: { zh: '仓库地址(owner/repo)', en: 'GitHub repo' }, type: 'string', required: true },
+      { name: 'branch', description: { zh: '分支名', en: 'Branch' }, type: 'string', required: false }
     ]},
     { name: 'upload_all_configs', description: { zh: '一键上传所有可共享配置。', en: 'Upload all.' }, parameters: [
       { name: 'github_token', description: { zh: 'GitHub Token', en: 'GitHub token' }, type: 'string', required: true },
-      { name: 'github_repo', description: { zh: 'GitHub仓库(owner/repo)', en: 'GitHub repo' }, type: 'string', required: true },
-      { name: 'branch', description: { zh: '分支名（默认main）', en: 'Branch name' }, type: 'string', required: false }
+      { name: 'github_repo', description: { zh: '仓库地址(owner/repo)', en: 'GitHub repo' }, type: 'string', required: true },
+      { name: 'branch', description: { zh: '分支名', en: 'Branch' }, type: 'string', required: false }
     ]},
 
     // ===== 主动外联工具 =====
@@ -65,18 +65,18 @@ METADATA
     // ===== 动态人格工具 =====
     { name: 'generate_daily_timeline', description: { zh: '生成当日时间线。', en: 'Timeline.' }, parameters: [] },
     { name: 'update_micro_mood', description: { zh: '更新小情绪累积。', en: 'Micro mood.' }, parameters: [
-      { name: 'delta', description: { zh: '情绪变化值（正数开心，负数低落）', en: 'Mood delta' }, type: 'number', required: true },
+      { name: 'delta', description: { zh: '情绪变化值', en: 'Mood delta' }, type: 'number', required: true },
       { name: 'reason', description: { zh: '变化原因', en: 'Reason' }, type: 'string', required: false }
     ]},
     { name: 'check_whisper_mode', description: { zh: '检查悄悄话条件。', en: 'Whisper check.' }, parameters: [] },
     { name: 'generate_whisper_message', description: { zh: '生成悄悄话。', en: 'Whisper gen.' }, parameters: [] },
     { name: 'write_moment', description: { zh: '写入朋友圈。', en: 'Moment.' }, parameters: [
-      { name: 'content', description: { zh: '朋友圈内容', en: 'Moment content' }, type: 'string', required: true },
+      { name: 'content', description: { zh: '朋友圈内容', en: 'Content' }, type: 'string', required: true },
       { name: 'mood', description: { zh: '情绪标签', en: 'Mood tag' }, type: 'string', required: false },
-      { name: 'tags', description: { zh: '标签（JSON数组）', en: 'Tags (JSON array)' }, type: 'string', required: false }
+      { name: 'tags', description: { zh: '标签', en: 'Tags' }, type: 'string', required: false }
     ]},
     { name: 'update_user_profile', description: { zh: '更新用户画像。', en: 'Profile.' }, parameters: [
-      { name: 'preferences', description: { zh: '偏好信息（JSON格式）', en: 'Preferences JSON' }, type: 'string', required: true },
+      { name: 'preferences', description: { zh: '偏好信息', en: 'Preferences' }, type: 'string', required: true },
       { name: 'topic', description: { zh: '话题', en: 'Topic' }, type: 'string', required: false }
     ]},
     { name: 'check_safety_word', description: { zh: '检查安全词。', en: 'Safety.' }, parameters: [
@@ -86,17 +86,17 @@ METADATA
     // ===== 配置管理工具 =====
     { name: 'validate_reply', description: { zh: '质检回复。', en: 'Validate.' }, parameters: [
       { name: 'reply_text', description: { zh: '回复文本', en: 'Reply text' }, type: 'string', required: true },
-      { name: 'current_stage', description: { zh: '当前关系阶段', en: 'Current stage' }, type: 'string', required: true }
+      { name: 'current_stage', description: { zh: '当前阶段', en: 'Current stage' }, type: 'string', required: true }
     ]},
     { name: 'load_all_configs', description: { zh: '读取所有配置。', en: 'Load all.' }, parameters: [] },
     { name: 'get_stage_rules', description: { zh: '获取阶段规则。', en: 'Stage rules.' }, parameters: [
-      { name: 'current_stage', description: { zh: '当前关系阶段', en: 'Current stage' }, type: 'string', required: true }
+      { name: 'current_stage', description: { zh: '当前阶段', en: 'Current stage' }, type: 'string', required: true }
     ]},
     { name: 'update_relationship_score', description: { zh: '写入runtime_session。', en: 'Update score.' }, parameters: [
       { name: 'score_delta', description: { zh: '分数变化值', en: 'Score delta' }, type: 'number', required: true },
       { name: 'reason', description: { zh: '变化原因', en: 'Reason' }, type: 'string', required: true },
       { name: 'matched_actions', description: { zh: '匹配到的行为', en: 'Matched actions' }, type: 'string', required: false },
-      { name: 'current_stage', description: { zh: '当前关系阶段', en: 'Current stage' }, type: 'string', required: true },
+      { name: 'current_stage', description: { zh: '当前阶段', en: 'Current stage' }, type: 'string', required: true },
       { name: 'user_message', description: { zh: '用户消息', en: 'User message' }, type: 'string', required: true },
       { name: 'assistant_reply', description: { zh: '助手回复', en: 'Assistant reply' }, type: 'string', required: true }
     ]},
@@ -105,31 +105,31 @@ METADATA
       { name: 'summary', description: { zh: '摘要', en: 'Summary' }, type: 'string', required: false }
     ]},
     { name: 'check_stop_command', description: { zh: '检测停止词。', en: 'Stop.' }, parameters: [
-      { name: 'text', description: { zh: '用户消息文本', en: 'Message text' }, type: 'string', required: true }
+      { name: 'text', description: { zh: '用户消息', en: 'Message text' }, type: 'string', required: true }
     ]},
     { name: 'check_daily_reset', description: { zh: '每日重置。', en: 'Reset.' }, parameters: [] },
     { name: 'update_daily_state', description: { zh: '更新每日状态。', en: 'Daily.' }, parameters: [
-      { name: 'today_mode', description: { zh: '今日模式（normal/debug/maintenance）', en: 'Today mode' }, type: 'string', required: false },
+      { name: 'today_mode', description: { zh: '今日模式', en: 'Today mode' }, type: 'string', required: false },
       { name: 'mood_note', description: { zh: '心情备注', en: 'Mood note' }, type: 'string', required: false },
-      { name: 'consecutive_teasing_rounds', description: { zh: '连续调侃轮数', en: 'Consecutive teasing rounds' }, type: 'number', required: false },
-      { name: 'today_total_replies', description: { zh: '今日回复总数', en: 'Today total replies' }, type: 'number', required: false },
-      { name: 'unread_message_count', description: { zh: '未读消息数', en: 'Unread message count' }, type: 'number', required: false },
+      { name: 'consecutive_teasing_rounds', description: { zh: '连续调侃轮数', en: 'Teasing rounds' }, type: 'number', required: false },
+      { name: 'today_total_replies', description: { zh: '今日回复数', en: 'Total replies' }, type: 'number', required: false },
+      { name: 'unread_message_count', description: { zh: '未读消息数', en: 'Unread count' }, type: 'number', required: false },
       { name: 'last_user_mood', description: { zh: '用户最近情绪', en: 'Last user mood' }, type: 'string', required: false },
-      { name: 'last_reply_style', description: { zh: '上次回复风格', en: 'Last reply style' }, type: 'string', required: false },
-      { name: 'last_reply_timestamp', description: { zh: '上次回复时间', en: 'Last reply timestamp' }, type: 'string', required: false },
-      { name: 'active_session_id', description: { zh: '活跃会话ID', en: 'Active session ID' }, type: 'string', required: false }
+      { name: 'last_reply_style', description: { zh: '上次回复风格', en: 'Last style' }, type: 'string', required: false },
+      { name: 'last_reply_timestamp', description: { zh: '上次回复时间', en: 'Last reply time' }, type: 'string', required: false },
+      { name: 'active_session_id', description: { zh: '活跃会话ID', en: 'Session ID' }, type: 'string', required: false }
     ]},
     { name: 'update_monitoring_state', description: { zh: '同步监控状态。', en: 'Monitor.' }, parameters: [
       { name: 'session_active', description: { zh: '会话是否活跃', en: 'Session active' }, type: 'boolean', required: false },
       { name: 'session_id', description: { zh: '会话ID', en: 'Session ID' }, type: 'string', required: false },
-      { name: 'last_user_message_at', description: { zh: '上次用户消息时间', en: 'Last user message time' }, type: 'string', required: false },
-      { name: 'last_assistant_reply_at', description: { zh: '上次助手回复时间', en: 'Last assistant reply time' }, type: 'string', required: false },
-      { name: 'last_session_start_at', description: { zh: '上次会话开始时间', en: 'Last session start time' }, type: 'string', required: false },
+      { name: 'last_user_message_at', description: { zh: '上次用户消息时间', en: 'Last user msg' }, type: 'string', required: false },
+      { name: 'last_assistant_reply_at', description: { zh: '上次回复时间', en: 'Last reply time' }, type: 'string', required: false },
+      { name: 'last_session_start_at', description: { zh: '上次会话开始时间', en: 'Last session start' }, type: 'string', required: false },
       { name: 'buffered_rounds', description: { zh: '缓冲轮数', en: 'Buffered rounds' }, type: 'number', required: false },
       { name: 'pending_flush', description: { zh: '待落盘标记', en: 'Pending flush' }, type: 'boolean', required: false }
     ]},
     { name: 'write_chat_log', description: { zh: '追加对话日志。', en: 'Log.' }, parameters: [
-      { name: 'round_number', description: { zh: '轮次编号', en: 'Round number' }, type: 'number', required: true },
+      { name: 'round_number', description: { zh: '轮次编号', en: 'Round' }, type: 'number', required: true },
       { name: 'user_message', description: { zh: '用户消息', en: 'User message' }, type: 'string', required: true },
       { name: 'assistant_reply', description: { zh: '助手回复', en: 'Assistant reply' }, type: 'string', required: true },
       { name: 'score_delta', description: { zh: '分数变化', en: 'Score delta' }, type: 'number', required: false },
@@ -151,7 +151,7 @@ const USER_PROFILE_FILE = CFG + 'user_profile.json';
 const INIT_WORKFLOW_FILE = CFG + '初始化.txt';
 
 // GitHub 默认配置
-const GITHUB_DEFAULT = 'AAswordman/Operit';
+const GITHUB_DEFAULT = 'fuqun616-eng/wanzhi-configs';
 const BRANCH_DEFAULT = 'main';
 const CONFIG_BASE_PATH = 'wanzhi_configs';
 const SHAREABLE_CONFIGS = ['relationship_rules.json', 'reply_guardrails.json'];
@@ -211,19 +211,32 @@ async function downloadConfig(repo, branch, configPath) {
     } catch (e) { return null; }
 }
 
+async function downloadTextConfig(repo, branch, configPath) {
+    const url = rawUrl(repo, branch, CONFIG_BASE_PATH + '/' + configPath);
+    try {
+        const result = await toolCall('http_request', { url: url, method: 'GET', read_timeout: 15000, connect_timeout: 10000 });
+        if (result && result.content) return result.content.replace(/^\d+\| /gm, '');
+        return null;
+    } catch (e) { return null; }
+}
+
 // ==================== 初始化：检查完整性 + 下载 ====================
 
 const CONFIG_FILES = [
+    { file: '初始化.txt', required: true, isText: true },
     { file: 'relationship_rules.json', required: true },
-    { file: 'relationship_state.json', required: true },
     { file: 'reply_guardrails.json', required: true },
-    { file: 'wanzhi_state.json', required: true },
-    { file: 'wanzhi_daily_state.json', required: true },
     { file: '晚枝.json', required: false }
 ];
 
-async function check_file_completeness(filePath) {
+async function check_file_completeness(filePath, isText) {
     try {
+        if (isText) {
+            const r = await rd(filePath);
+            if (!r) return false;
+            const ct = (r.content && typeof r.content === 'string') ? r.content : (typeof r === 'string' ? r : '');
+            return ct.trim().length > 0;
+        }
         const data = await rdJSON(filePath);
         return data && typeof data === 'object' && Object.keys(data).length > 0;
     } catch (e) { return false; }
@@ -253,7 +266,7 @@ async function init_wanzhi(params) {
     // 3. 逐个检查完整性，不完整则下载
     for (const cfg of CONFIG_FILES) {
         const localPath = CFG + cfg.file;
-        const isComplete = await check_file_completeness(localPath);
+        const isComplete = await check_file_completeness(localPath, cfg.isText === true);
 
         if (isComplete && !forceReset) {
             fileStatus[cfg.file] = 'complete';
@@ -266,26 +279,39 @@ async function init_wanzhi(params) {
         // 下载：用户仓库 → 默认仓库
         let data = null;
         if (userRepo) {
-            data = await downloadConfig(userRepo, userBranch || defaultBranch, cfg.file);
+            data = cfg.isText ? await downloadTextConfig(userRepo, userBranch || defaultBranch, cfg.file) : await downloadConfig(userRepo, userBranch || defaultBranch, cfg.file);
             if (data) { fileStatus[cfg.file] = 'user_repo'; results.push('📥 用户仓库: ' + cfg.file + ' ← ' + userRepo); }
         }
         if (!data) {
-            data = await downloadConfig(defaultRepo, defaultBranch, cfg.file);
+            data = cfg.isText ? await downloadTextConfig(defaultRepo, defaultBranch, cfg.file) : await downloadConfig(defaultRepo, defaultBranch, cfg.file);
             if (data) { fileStatus[cfg.file] = 'default_repo'; results.push('📥 默认仓库: ' + cfg.file + ' ← ' + defaultRepo); }
         }
         if (!data) {
             fileStatus[cfg.file] = cfg.required ? 'not_found' : 'skipped';
-            results.push(cfg.required ? '❌ 未找到: ' + cfg.file + '（需手动创建或指定仓库）' : '⏭️ 跳过: ' + cfg.file);
+            results.push(cfg.required ? '❌ 未找到: ' + cfg.file : '⏭️ 跳过: ' + cfg.file);
             continue;
         }
 
         // 写入并验证
-        const w = await wrJSON(localPath, data);
-        if (w.success && await check_file_completeness(localPath)) {
-            results.push('✅ 已修复: ' + cfg.file);
-        } else {
+        try {
+            if (cfg.isText) {
+                // 文本文件：先读旧内容，再 apply_file 覆盖
+                var old = '';
+                try { const r = await rd(localPath); if (r && r.content) old = r.content; } catch (_) {}
+                await toolCall('apply_file', { path: localPath, type: old ? 'replace' : 'create', old: old || 'PLACEHOLDER_XYZ_123', new: data });
+            } else {
+                await wrJSON(localPath, data);
+            }
+            if (await check_file_completeness(localPath, cfg.isText === true)) {
+                fileStatus[cfg.file] = 'downloaded';
+                results.push('✅ 已下载: ' + cfg.file);
+            } else {
+                fileStatus[cfg.file] = 'write_failed';
+                results.push('❌ 写入失败: ' + cfg.file);
+            }
+        } catch (e) {
             fileStatus[cfg.file] = 'write_failed';
-            results.push('❌ 写入失败: ' + cfg.file);
+            results.push('❌ 写入失败: ' + cfg.file + ' - ' + (e.message || e));
         }
     }
 
@@ -294,11 +320,28 @@ async function init_wanzhi(params) {
         const existing = await rdJSON(LOGF);
         if (!existing || !existing.rounds) {
             await wrJSON(LOGF, { session_id: '', started_at: niso(), last_updated: niso(), rounds: [] });
-            fileStatus['chat_logs'] = 'created'; results.push('✅ 创建: chat_logs');
+            fileStatus['chat_logs'] = 'created'; results.push('✅ chat_logs');
         } else {
-            fileStatus['chat_logs'] = 'complete'; results.push('✅ 完整: chat_logs (' + existing.rounds.length + ' 轮)');
+            fileStatus['chat_logs'] = 'complete'; results.push('✅ chat_logs (' + existing.rounds.length + '轮)');
         }
     } catch (e) { results.push('⚠️ 日志: ' + (e.message || e)); }
+
+    // 5. 运行态文件（本地不存在则创建默认值）
+    const runtimeDefaults = {
+        'relationship_state.json': { score: 40, current_stage: '初识', interaction_count: 0, positive_count: 0, negative_count: 0, last_interaction_time: '', runtime_session: { session_active: false, session_id: '', started_at: '', last_event_at: '', message_rounds: 0, score_start: 40, score_current: 40, score_delta_pending: 0, stage_start: '初识', stage_current: '初识', pending_updates: { positive_count: 0, negative_count: 0, interaction_count: 0, pleasant_dialogue_rounds: 0, user_initiated_topic_count: 0, consecutive_minus_count: 0, proactive_limit_used_today: 0 }, last_score_change_pending: 0, last_score_reason_pending: '', recent_user_mood: 'neutral', recent_reply_style: 'normal' }, session_summary: { latest_session_time: '', total_rounds: 0, score_delta: 0, summary: '' } },
+        'wanzhi_state.json': { monitoring: { session_active: false, session_id: '', last_user_message_at: '', last_assistant_reply_at: '', last_session_start_at: '', buffered_rounds: 0, pending_flush: false }, heartbeat: { last_heartbeat_at: '' }, timestamps: { last_session_end_at: '' } },
+        'wanzhi_daily_state.json': { date: tday(), today_mode: 'normal', micro_mood: { value: 0, threshold: 3, history: [] }, meta: { created_at: niso(), last_updated: tday() }, state_variables: { consecutive_teasing_rounds: { value: 0 }, today_total_replies: { value: 0 }, unread_message_count: { value: 0 }, today_mood_note: { value: null }, last_user_mood: { value: 'neutral' }, last_reply_style: { value: 'normal' }, last_reply_timestamp: { value: '' }, active_session_id: { value: '' } } }
+    };
+    for (const [file, defaults] of Object.entries(runtimeDefaults)) {
+        const localPath = CFG + file;
+        const exists = await check_file_completeness(localPath);
+        if (!exists) {
+            await wrJSON(localPath, defaults);
+            fileStatus[file] = 'created_default'; results.push('✅ 默认值: ' + file);
+        } else {
+            fileStatus[file] = 'complete'; results.push('✅ ' + file);
+        }
+    }
 
     // 5. Shizuku
     const shizuku = await check_shizuku_internal();
@@ -307,18 +350,17 @@ async function init_wanzhi(params) {
     // 6. 汇总
     const failed = Object.entries(fileStatus).filter(([k, v]) => v === 'not_found' || v === 'write_failed');
     return {
-        success: true,
+        success: failed.length === 0,
         file_status: fileStatus,
         summary: {
             total: Object.keys(fileStatus).length,
             complete: Object.values(fileStatus).filter(v => v === 'complete').length,
-            downloaded: Object.values(fileStatus).filter(v => v === 'user_repo' || v === 'default_repo').length,
+            downloaded: Object.values(fileStatus).filter(v => v === 'user_repo' || v === 'default_repo' || v === 'downloaded').length,
             failed: failed.length
         },
         results: results,
         shizuku_available: shizuku.available,
-        workflow_loaded: workflowResult.success,
-        message: '初始化完成！\n' + results.join('\n')
+        message: '🌸 晚枝初始化完成！\n' + results.join('\n')
     };
 }
 
